@@ -46,38 +46,48 @@ public class SortingTests {
 	
 	@Test
 	public void testSwap() {
-
-
+			SortingApp.swap(testNumbers, 0, 1);
+			assertEquals(testNumbers[0],3);
+			assertEquals(testNumbers[1],4);
 	}
 	
 	@Test
 	public void testMerge() {
-
-		
+		long a[] = {1,3,5,7,2,4,8,9};
+		long workSpace[] = new long[a.length];
+		SortingApp.merge(a, workSpace, 0, 4, 7);
+		assertArrayEquals(a,sortedNumbers);
 	}
 	
 	@Test
 	public void testPartition() {
-		
+		int storedIndex = SortingApp.partition(testNumbers, 0, 7, 4);
+		long[] expectedNumbers = {4, 3, 5, 2, 1, 7, 8, 9};
+		assertArrayEquals(testNumbers, expectedNumbers);
+		assertEquals(storedIndex , 5);
 	}
 	
 	@Test
 	public void testNonrecMergeSort() {
-	
+		SortingApp.nonrecMergeSort(testNumbers);
+		assertArrayEquals(testNumbers, sortedNumbers);
 	}
 	
 	@Test
 	public void testMergeSort() {
-		
+		SortingApp.recMergeSort(testNumbers);
+		assertArrayEquals(testNumbers, sortedNumbers);
 	}
 	
 	@Test
 	public void testQuickSort() {
-		
+		SortingApp.quicksort(testNumbers);
+		assertArrayEquals(testNumbers, sortedNumbers);
 	}
 	
 	@Test
-	public void testBubbleSort() {		
-		
+	public void testBubbleSort() {	
+		SortingApp.bubbleSort(testNumbers);
+		assertArrayEquals(testNumbers, sortedNumbers);
 	}	
 }

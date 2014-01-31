@@ -1,0 +1,20 @@
+The bugs I found and the changes I made:
+
+1. Swap method
+
+swap method was not working correctly.
+a[j] = a[i] and a[j] = temp are the same thing: copy a[i] into a[j].
+So, I changed a[j] = a[i] into a[i] = a[j].
+
+
+2. Partition method
+
+the bug: no increment for storeIndex after swap
+So, I added storeIndex++ in if after swapping.
+
+3. nonrecMergeSort method
+
+the bug: no necessary swap inside for loop.
+So, I removed the swap method after merge().
+
+I runned with both buggy = true and buggy = false. Everything looks great after fixing those 3 bugs.

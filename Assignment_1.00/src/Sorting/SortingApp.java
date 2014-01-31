@@ -1,7 +1,7 @@
 package Sorting;
 
 // fill in your information in the line below, and comment it out in order to compile
-// Name: ???   Student ID: ???;
+// Name: Michelle(Yuh) Chan   Student ID: 28444261;
 
 import java.text.DecimalFormat;
 
@@ -16,11 +16,10 @@ public class SortingApp {
 		for (int k=1; k<a.length; k *= 2) {
 			for (int i=0; i<a.length; i += (k*2)) {
 				merge(a, workSpace, i, i+k, i+k+k-1);
-				swap(a, 0, a.length-1);
+				//swap(a, 0, a.length-1);
 			}
 		}
 	}//nonrecMergeSort()
-	
 	
 	//-------------------------------------------------------------
 	//---------- Below is an implementation of Bubble Sort ----------
@@ -35,7 +34,6 @@ public class SortingApp {
 			}//for
 		}//for
 	}//bubbleSort()
-	
 	
 	//-----------------------------------------------------------------------
 	//---------- Below is an implementation of recursive Mergesort ----------
@@ -99,9 +97,10 @@ public class SortingApp {
 		swap(a, pIdx, right);
 		int storeIndex = left;
 		for(int i=left; i<right; i++) {
-			if(a[i] <= pivot)
+			if(a[i] <= pivot){
 				swap(a, i, storeIndex);
-
+				storeIndex++;
+			}
 		}//for
 		swap(a, right, storeIndex);
 		return storeIndex;
@@ -130,7 +129,7 @@ public class SortingApp {
 	
 	public static void swap(long[] a, int i, int j) {
 		long temp = a[i];
-		a[j] = a[i];
+		a[i] = a[j];
 		a[j] = temp;
 	}//swap
 	
