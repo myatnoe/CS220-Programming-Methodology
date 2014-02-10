@@ -13,97 +13,114 @@ import static BOut.BreakOutEngine.*;
  * 
  * @author Eliot Moss
  */
-public abstract class PowerUp extends Sprite
+public class PowerUp extends Sprite
 {	
 
-  /**
-   * audio object for playing sounds
-   */
-  private BaseAudio audio;
-    
-  /**
-   * file with sound for when a PowerUp falls off the bottom of the screen
-   */
-  private String PowerUpLoseSound = SoundsDirectory + "bang_1.wav";
-  
-  /*
-   * file with sound for when a PowerUp hits the paddle
-   */
-  private String PowerUpHitSound = SoundsDirectory + "cling_1.wav";
-  
-  /**
-   * Constructor that requires a String to describe what kind of block it is, with a BufferedImage
-   * and a specified location. 
-   * @param image
-   * @param x
-   * @param y
-   */
-  protected PowerUp (BufferedImage image, double x, double y)
-  {
-    super(image, x, y);
-  }
-	
-  /**
-   * Activates the PowerUp (is special action) and makes its Sprite inactive.
-   */
-  public final void collisionWithPaddle ()
-  {
-    activatePowerUp();
-    playHitSound();
-    this.setActive(false);
-  }
-	
-  /**
-   * Handles the case of activating PowerUp
-   */
-  public abstract void activatePowerUp ();
+	/**
+	 * audio object for playing sounds
+	 */
+	private BaseAudio audio;
 
-  /**
-   * Handles the collision with the bottom of the screen;
-   * performs the losePowerUp special action and makes its
-   * Sprite inactive
-   */
-  public final void collisionWithBounds ()
-  {		
-    losePowerUp();
-    playLoseSound();
-    this.setActive(false); // fell off the bottom
-  }
+	/**
+	 * file with sound for when a PowerUp falls off the bottom of the screen
+	 */
+	private String PowerUpLoseSound = SoundsDirectory + "bang_1.wav";
 
-  /**
-   * handles the case of <i>not</i> getting the PowerUp
-   */
-  public abstract void losePowerUp ();
-  
-  /**
-   * set the object for playing sounds
-   * @param audio the BaseAudio for playing sounds
-   */
-  public void setAudio (BaseAudio audio)
-  {
-    this.audio = audio;
-  }
-  
-  /**
-   * plays the sound that indicates the PowerUp was lost
-   */
-  protected void playLoseSound ()
-  {
-    if (audio != null)
-    {
-      audio.play(PowerUpLoseSound);
-    }
-  }
-  
-  /**
-   * plays the sound that indicates the PowerUp was hit (won)
-   */
-  protected void playHitSound ()
-  {
-    if (audio != null)
-    {
-      audio.play(PowerUpHitSound);
-    }
-  }
-  
+	/*
+	 * file with sound for when a PowerUp hits the paddle
+	 */
+	private String PowerUpHitSound = SoundsDirectory + "cling_1.wav";
+
+	// Activate or Lose PowerUp
+	ActivatePowerUp activatePowerUp;
+	LosePowerUp losePowerUp;
+
+	/**
+	 * Constructor that requires a String to describe what kind of block it is, with a BufferedImage
+	 * and a specified location. 
+	 * @param image
+	 * @param x
+	 * @param y
+	 */
+	protected PowerUp (BufferedImage image, double x, double y)
+	{
+		super(image, x, y);
+		activatePowerUp = new IncreaseNothing();
+		losePowerUp = new DecreaseNothing();
+	}
+
+	protected PowerUp (BufferedImage image, double x, double y, ActivatePowerUp activate, LosePowerUp lose)
+	{
+		super(image, x, y);
+		activatePowerUp = activate;
+		losePowerUp = lose;
+	}
+
+	/**
+	 * Activates the PowerUp (is special action) and makes its Sprite inactive.
+	 */
+	public final void collisionWithPaddle ()
+	{
+		activatePowerUp();
+		playHitSound();
+		this.setActive(false);
+	}
+
+	/**
+	 * Handles the case of activating PowerUp
+	 */
+	public void activatePowerUp (){
+		activatePowerUp.updateMultiplier();
+	}
+
+	/**
+	 * Handles the collision with the bottom of the screen;
+	 * performs the losePowerUp special action and makes its
+	 * Sprite inactive
+	 */
+	public final void collisionWithBounds ()
+	{		
+		losePowerUp();
+		playLoseSound();
+		this.setActive(false); // fell off the bottom
+	}
+
+	/**
+	 * handles the case of <i>not</i> getting the PowerUp
+	 */
+	public void losePowerUp (){
+		losePowerUp.updateMultiplier();
+	}
+
+	/**
+	 * set the object for playing sounds
+	 * @param audio the BaseAudio for playing sounds
+	 */
+	public void setAudio (BaseAudio audio)
+	{
+		this.audio = audio;
+	}
+
+	/**
+	 * plays the sound that indicates the PowerUp was lost
+	 */
+	protected void playLoseSound ()
+	{
+		if (audio != null)
+		{
+			audio.play(PowerUpLoseSound);
+		}
+	}
+
+	/**
+	 * plays the sound that indicates the PowerUp was hit (won)
+	 */
+	protected void playHitSound ()
+	{
+		if (audio != null)
+		{
+			audio.play(PowerUpHitSound);
+		}
+	}
+
 }
