@@ -1,0 +1,24 @@
+Strategy Pattern # 1
+
+Add two strategy classes (interfaces, actually), one for the action when a PowerUp is activated (with two concrete subclasses, one of which does nothing, and the other increments the score multiplier), and one for the action when a PowerUp is lost (with two concrete subclasses, one of which does nothing, and the other of which decrements the score multiplier).
+
+1. Added 2 interface classes
+
+- ActivatePowerUp and LosePowerUp
+
+
+2. Added 4 concrete classes
+
+- IncreaseMultiplication and IncreaseNothing implementing ActivatePowerUp
+- DecreaseMultiplication and DecreaseNothing implementing LosePowerUp.
+
+
+3. Changes for PowerUp class
+
+- added 2 variables, activatePowerUp and losePowerUp for 2 behaviors (hit or miss power up with the ball)
+- added implementation in activatePowerUp() and losePowerUp() which were abstract classes initially.
+
+4. Changes for PowerUpFactory class
+
+- create PowerUp object instead of creating 4 different object types for 4 different colors.
+- add the behaviors (more point, lose point or no difference) to the PowerUp objects.
