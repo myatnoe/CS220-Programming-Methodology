@@ -1,0 +1,18 @@
+Assignment 1B
+
+Classes Added
+- PowerUpStrategyBase (concrete component which will be decorated)
+- PowerUpStrategyDecorator (this class which will be extended by concrete decorator classes)
+- PowerUpStrategyDecoratorIncr (call super.activate() and call game state increase multiplier in activate())
+- PowerUpStrategyDecoratorDecr (call super.lose() and call game state decrease multiplier in lost())
+
+Classes Dropped
+- PowerUpStrategyAbstract
+- PowerUpStrategyDecrLose
+- PowerUpStrategyIncrDecr
+- PowerUpStrategyIncrHit
+- PowerUpStrategyPlain
+
+Classes Changes
+- PowerUpFactory
+  Create PowerUp using Decorator Strategy. Wrap the base with desire behavior/decorator)
