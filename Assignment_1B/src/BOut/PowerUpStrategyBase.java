@@ -4,14 +4,9 @@ public class PowerUpStrategyBase implements PowerUpStrategy {
 
 
 	@Override
-	public void activate() {
-		
-		
-	}
+	public void activate() {}
 
 	@Override
-	public void lose() {
-		
-	}
+	public void lose() {}
 
 }
