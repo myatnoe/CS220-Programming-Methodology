@@ -196,7 +196,7 @@ public class Ball extends Sprite
     if (onBottom) {
       // first check for loss of the Ball
       this.setActive(false); // fell off the bottom
-      GameState.getGameState().noteBallInactive();
+      //GameState.getGameState().noteBallInactive();
     } else {
       // the speed direction checks are to avoid double bounces
       if (onLeft && this.getHorizontalSpeed() < 0)
@@ -258,5 +258,49 @@ public class Ball extends Sprite
       this.bounce(1, 0, paddle.getRecentVelocity(), PaddleBounceSound);
     }
   }
+  
+  private static BreakoutEventSource<ActiveChangedEvent<Ball>> activitySource =
+		new BreakoutEventSource<ActiveChangedEvent<Ball>>();
+
+	/**
+	 * getter of event source for changes in activity status of Ball
+	 * @return the current BreakoutEventSource<ActiveChangedEvent<Ball>>
+	 */
+	public static BreakoutEventSource<ActiveChangedEvent<Ball>> getActiveChangedSource ()
+	{
+		return activitySource;
+	}
+
+	/**
+	 * should be called as we start a new game, so we can get ready
+	 */
+	public static void newGame () {
+		activitySource.reset();
+	}
+	
+	/**
+	 * wraps activity changes so that we can notify listeners
+	 * @param newValue a boolean giving the new value for whether the PowerUp is active
+	 */
+	public void setActive (boolean newValue)
+	{
+		boolean changed = (this.isActive() ^ newValue);
+		super.setActive(newValue);
+		if (changed)
+		{
+			notifyActivityChanged();
+		}
+	}
+
+	/**
+	 * use to notify activity change listeners (if any)
+	 */
+	private void notifyActivityChanged ()
+	{
+		if (activitySource != null && activitySource.anyListeners())
+		{
+			activitySource.notify(new ActiveChangedEvent<Ball>(this));
+		}
+	}
 
 }

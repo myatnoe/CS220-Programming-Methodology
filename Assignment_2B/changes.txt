@@ -1,0 +1,27 @@
+Assignment 2B
+
+BreakOutGame.java
+- add Block.newGame() and Ball.newGame() in initEventSources() method.
+
+Block.java
+- add the static field Block.activitySource, its (static) initializer, and its (static) getter.
+- add newGame() method to reset activitySource.
+- remove the following from collisionWithBall() method
+	GameState gs = GameState.getGameState();
+	gs.incrementScore(getValue());
+	gs.decrementBlocksRemaining();
+- override setActive() method of Sprite
+- add notifyActivityChanged
+
+Ball.java
+- add the static field Block.activitySource, its (static) initializer, and its (static) getter.
+- add newGame() method to reset activitySource.
+- remove GameState.getGameState().noteBallInactive() from collisionWithBounds() method
+- override setActive() method of Sprite
+- add notifyActivityChanged
+
+
+GameState.java
+- add activeChanged(Ball,int) and activeChanged(Block,int)
+- add anonymous classes in startLevel() method.
+- make incrementScore() and noteBallInactive() method private

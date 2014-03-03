@@ -119,6 +119,8 @@ public class BreakOutGame extends GameObject
   private void initEventSources ()
   {
     PowerUp.newGame();
+    Block.newGame();
+    Ball.newGame();
   }
 
   /**
