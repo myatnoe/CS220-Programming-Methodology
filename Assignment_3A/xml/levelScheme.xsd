@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Created with Liquid XML Studio 1.0.8.0 (http://www.liquid-technologies.com) -->
+<xs:schema xmlns:Q1="breakout" targetNamespace="breakout" 
+		   xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  
+  <xs:element name="blockInstance">
+  	<xs:complexType>
+	    <xs:attribute name="template" type="xs:IDREF" />
+    	<xs:attribute name="x" type="Q1:lengthType" />
+    	<xs:attribute name="y" type="Q1:lengthType" />
+  	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="location">
+	  <xs:complexType>
+    	<xs:attribute name="x" type="xs:int" />
+    	<xs:attribute name="y" type="xs:int" />
+    	<xs:attribute name="width" type="xs:int" />
+    	<xs:attribute name="height" type="xs:int" />
+  	  </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="powerup">
+	  <xs:complexType>
+    	<xs:attribute name="class" type="xs:string" />
+    	<xs:attribute name="probability" type="xs:int" />
+  	  </xs:complexType>
+  </xs:element>
+
+  <xs:element name="blockPattern">
+	  <xs:complexType>
+	    <xs:sequence maxOccurs="unbounded">
+	      <xs:element name="block" type="xs:IDREF" />
+	    </xs:sequence>
+	    <xs:attribute name="class" type="xs:string" />
+	    <xs:attribute name="startx" type="xs:int" />
+	    <xs:attribute name="starty" type="xs:int" />
+	    <xs:attribute name="count" type="xs:int" default="0" />
+	  </xs:complexType>
+  </xs:element>
+  
+  <xs:element name="image">
+	  <xs:complexType>
+	    <xs:all>
+	      <xs:element name="frame">
+	        <xs:complexType>
+	          <xs:all>
+	            <xs:element ref="Q1:location" />
+	          </xs:all>
+	          <xs:attribute name="duration" type="xs:int" />
+	        </xs:complexType>
+	      </xs:element>
+	    </xs:all>
+	    <xs:attribute name="file" type="xs:string" />
+	  </xs:complexType>
+  </xs:element>
+
+  <xs:element name="colorType">
+	  <xs:complexType>
+	    <xs:attribute name="R" type="xs:int" />
+	    <xs:attribute name="G" type="xs:int" />
+	    <xs:attribute name="B" type="xs:int" />
+	  </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="lengthType">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d+(\.\d+)?(px)?" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="blockTemplate">
+    <xs:complexType>
+		<xs:sequence>
+			<xs:element minOccurs="1" maxOccurs="1" ref="Q1:colorType" />
+			<xs:element minOccurs="0" maxOccurs="unbounded" ref="Q1:powerup" />
+		</xs:sequence>
+		<xs:attribute name="id" type="xs:ID" />
+		<xs:attribute name="width" type="Q1:lengthType" />
+		<xs:attribute name="height" type="Q1:lengthType" />
+		<xs:attribute name="score" type="xs:int" />
+		<xs:attribute name="class" type="xs:string" default="StandardBlock" />
+	</xs:complexType>
+  </xs:element>
+  
+  <xs:element name="level">
+	<xs:complexType>
+		<xs:sequence>
+			<xs:element ref="Q1:image" />
+			<xs:choice maxOccurs="unbounded">
+				<xs:element maxOccurs="unbounded" ref="Q1:blockPattern" />
+                <xs:element maxOccurs="unbounded" ref="Q1:blockInstance" />
+            </xs:choice>
+         </xs:sequence>
+         <xs:attribute name="music" type="xs:string" default="none"/>
+	</xs:complexType>
+  </xs:element>
+  
+
+  <xs:element name="Game">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="Q1:blockTemplate"/>
+        <xs:element maxOccurs="unbounded" ref="Q1:level"/>
+      </xs:sequence>
+      <xs:attribute name="grid_x" type="xs:int" />
+      <xs:attribute name="grid_y" type="xs:int" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
