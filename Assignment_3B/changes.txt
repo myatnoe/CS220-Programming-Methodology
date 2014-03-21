@@ -1,0 +1,112 @@
+Assignment 3B Changes
+
+1. Changes made for Applying the Flyweight Pattern
+
+blockList to save unique BlockDesc.
+
+check whether the block is already created or need to create new BlockDesc
+
+	private static BlockDesc getBlock(int width, int height, int r, int g, int b){
+	  for(BlockDesc bd: blockList){
+		  if(bd.getWidth() == width && 
+				  bd.getHeight() == height &&
+				  bd.getR() == r &&
+				  bd.getG() == g &&
+				  bd.getB() == b){
+			  return bd;
+		  }
+	  }
+	  BlockDesc block = new BlockDesc(width, height, r, g, b);
+	  blockList.add(block);
+	  return block;
+  	}
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+2. Changes made in the following methods for Supporting deletion of archive files
+
+in enum MyEvent
+	Delete
+
+in getKeyEvent()
+	else if (bsInput.isKeyPressed(KeyEvent.VK_D))
+			return MyEvent.Delete;
+
+in processInput()
+	case Delete:        state = state.gotDelete  (this);  break;
+	
+in enum State
+	- Default gotDelete
+		State gotDelete(GameMenu gameMenu) { return this; }
+		
+	//Deleting Archive File
+		DeletingArchive(Mode.Archives){
+			State gotYes (GameMenu menu){
+				menu.archiveFiles[menu.archiveIndex].getAbsoluteFile().delete();
+				menu.scanArchiveFiles();
+				return ChoosingArchive;
+			}
+			State gotNo (GameMenu menu){ return ChoosingArchive; }
+			String getMenuString (GameMenu menu) { return "Delete Archive? Y or N";}
+		},
+		
+	in ChoosingArchive()
+		State gotDelete (GameMenu menu){
+				if (menu.archiveFiles.length <= 0) return this;
+				return DeletingArchive;
+			}
+			
+			
+and add scanArchiveFiles() method as suggested
+
+	private void scanArchiveFiles(){
+		File archiveDirectory = new File(".");
+		archiveFiles = archiveDirectory.listFiles(
+				new FilenameFilter() {
+					public boolean accept (File dir, String name) {
+						return name.matches(".+\\.sav");
+					}
+				});
+		Arrays.sort(archiveFiles, new Comparator<File>() {
+			public int compare (File f1, File f2) {
+				return f1.getName().compareTo(f2.getName());
+			}
+		});
+	}
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. Reworking to use FileSet
+
+1) Add two FileSet objects for level and archive
+
+FileSet levelFiles;
+FileSet archiveFiles;
+	
+2) initialize those two FileSet objects in initResources() instead of populateLevelChoices.
+
+levelFiles = new FileSet("levels", "Level\\d+\\.xml");
+archiveFiles = new FileSet(".", ".+\\.sav");
+
+3) scanArchiveFiles() acts as FileSet.refresh(). So, remove scanArchiveFiles() and use refresh().
+
+4) change all levelFiles.length and archiveFiles.length to .size()
+
+5) in Mode > Levels > getChoiceString, 
+use menu.archiveFiles.currentDisplay() instead of getDisplayFor(menu.archiveFiles[menu.archiveIndex].getName());
+
+6) in State > ChoosingLevel > gotForward and gotBackward,
+use instead menu.levelFiles.advance(1) and menu.levelFiles.advance(-1) of ++menu.levelIndex or --menu.levelIndex
+
+7) remove fixLevelIndex(). no need menu.fixLevelIndex(); which is already done by FileSet.advance().
+
+8) 5, 6 and 7 go for archive as well. Made changes in ChoosingArchive
+
+9) change menu.levelFiles[menu.levelIndex].getAbsolutePath(); to menu.levelFiles.current().getAbsolutePath(); and same goes for archiveFiles
+
+
+DONE!!!!!
+
+Michelle Chan - 28444261
+
+
+

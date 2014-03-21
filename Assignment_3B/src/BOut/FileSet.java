@@ -86,7 +86,7 @@ public class FileSet implements Iterable<File> {
     }
     else
     {
-      index = (((index % n) + n) % n); // this way ot handle negative numbers too
+      index = (((index % n) + n) % n); // this way to handle negative numbers too
     }
   }
   

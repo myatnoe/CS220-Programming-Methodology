@@ -1,8 +1,11 @@
 package XmlImporter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import BOut.BlockDesc;
 import breakout.BlockTemplateDocument.BlockTemplate;
 import breakout.ColorTypeDocument.ColorType;
-import BOut.BlockDesc;
 
 /**
  * Singleton Factory that constructs BlockDesc descriptions out of the block specification in a Block Template.
@@ -13,6 +16,7 @@ public class BlockDescFactory {
 	
   // the singleton instance
   private static BlockDescFactory instance = new BlockDescFactory();
+  private static List<BlockDesc> blockList = new ArrayList<BlockDesc>();
 	
   // private to enforce singleton
   private BlockDescFactory () { }
@@ -40,7 +44,22 @@ public class BlockDescFactory {
     int r = color.getR();
     int g = color.getG();
     int b = color.getB();
-    return new BlockDesc(width, height, r, g, b);
+    return getBlock(width, height, r, g, b);
+  }
+  
+  private static BlockDesc getBlock(int width, int height, int r, int g, int b){
+	  for(BlockDesc bd: blockList){
+		  if(bd.getWidth() == width && 
+				  bd.getHeight() == height &&
+				  bd.getR() == r &&
+				  bd.getG() == g &&
+				  bd.getB() == b){
+			  return bd;
+		  }
+	  }
+	  BlockDesc block = new BlockDesc(width, height, r, g, b);
+	  blockList.add(block);
+	  return block;
   }
 
 }
