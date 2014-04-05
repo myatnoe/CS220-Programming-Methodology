@@ -1,0 +1,243 @@
+Assignment 4 Changes (Michelle Chan - 28444261)
+
+Test Cases that I added
+
+	@Test
+	public void testUpdate_Play(){
+
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_RIGHT);
+		fakeKey(KeyEvent.VK_ENTER);
+
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "Level2");
+		menu.update(50);
+		assertEquals(engine.nextGameID, BreakOutEngine.BreakOutPlayGame);
+		assertTrue(engine.nextLevel.endsWith("testLevels"+File.separator+"Level2.xml"));
+		assertTrue(menu.sawFinish);
+
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreRestore(){
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_R);
+
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+
+		menu.update(50);
+		assertTrue(menu.getState().getChoiceString(menu).contains("archiv"));
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "Level1"); // found error here
+		
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreBackwardForward() {
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_LEFT);
+		fakeKey(KeyEvent.VK_RIGHT);
+
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive3");
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		assertFalse(menu.sawFinish);
+
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreDeleteYes() {
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_D);
+		fakeKey(KeyEvent.VK_Y);
+		
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+		
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertTrue(menu.getState().getMenuString(menu).startsWith("Delete"));
+		menu.update(50);
+		assertFalse(new File(testArchivesDir+File.separator+"archive1.sav").canRead());
+		assertEquals(menu.getState().getChoiceString(menu), "archive2");
+		
+		
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreDeleteNo() {
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_D);
+		fakeKey(KeyEvent.VK_N);
+		
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+		
+		
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertTrue(menu.getState().getMenuString(menu).startsWith("Delete"));
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		assertTrue(new File(testArchivesDir+File.separator+"archive1.sav").exists());
+		
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestorePlay(){
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_ENTER);
+		
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+		
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertEquals(engine.nextGameID, BreakOutEngine.BreakOutRestore);
+		assertTrue(engine.restoreFilename.endsWith("archive1.sav"));
+		assertTrue(menu.sawFinish);
+		
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreQuitYes(){
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_Q);
+		fakeKey(KeyEvent.VK_Y);
+		
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+		
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertTrue(menu.getState().getMenuString(menu).startsWith("Quit"));
+		menu.update(50);
+		assertTrue(menu.sawFinish);
+		assertNull(engine.nextGame);
+
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+	
+	@Test
+	public void testUpdate_RestoreQuitNo(){
+		expect(mockTitle.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+		expect(mockChoice.drawString(isA(Graphics2D.class), isA(String.class), anyInt(), anyInt())).andStubReturn(0);
+
+		fakeKey(KeyEvent.VK_R);
+		fakeKey(KeyEvent.VK_Q);
+		fakeKey(KeyEvent.VK_N);
+		
+		replay(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		menu.update(50);
+		assertTrue(menu.getState().getMenuString(menu).startsWith("Quit"));
+		menu.update(50);
+		assertEquals(menu.getState().getChoiceString(menu), "archive1");
+		assertFalse(menu.sawFinish);
+
+		verify(mockPlay, mockQuit, mockForward, mockBackward, mockInput);
+	}
+
+
+
+
+What I found out when I ran my implemented test cases
+
+1) testUpdate_Play
+no problem
+-----------------------------------------------------------------------------
+
+2) testUpdate_RestoreRestore
+
+Archive back to Level is not working!!
+
+I change return State.ChoosingArchive to State.ChoosingLevel
+
+  private enum Mode {
+    Levels {...},
+    Archives {...
+    	State getOppositeState () { return State.ChoosingLevel; }
+		...
+    };
+-----------------------------------------------------------------------------
+    
+3) testUpdate_RestoreBackwardForward
+
+Backward(Left) is not working.
+
+I change menu.archives.advance(1) to menu.archives.advance(-1).
+
+ChoosingArchive(Mode.Archives) {
+      ...
+      State gotBackward (GameMenu menu) {
+        menu.archives.advance(-1);
+        return this;
+      }, ...}
+ -----------------------------------------------------------------------------
+ 
+ 4) testUpdate_RestoreDeleteYes
+ 
+ Deleted! But the Archive list doesn't refresh to new file list
+ 
+ I added menu.archives.refresh();
+ 
+ DeletingArchive(Mode.Archives) {
+      State gotYes (GameMenu menu) { 
+        menu.archives.current().getAbsoluteFile().delete();
+        menu.archives.refresh();
+        return ChoosingArchive;
+      }
+ 
+ -----------------------------------------------------------------------------
+ 
+ 5) testUpdate_RestoreDeleteNo
+ no problem
+ -----------------------------------------------------------------------------
+ 
+ 6) testUpdate_RestorePlay
+ no problem
+ -----------------------------------------------------------------------------
+ 
+ 7) testUpdate_RestoreQuitYes
+ no problem
+ -----------------------------------------------------------------------------
+ 
+ 8) testUpdate_RestoreQuitNo
+ no problem
+ -----------------------------------------------------------------------------
+ 

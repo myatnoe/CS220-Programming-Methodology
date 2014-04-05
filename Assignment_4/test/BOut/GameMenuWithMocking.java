@@ -14,6 +14,7 @@ public class GameMenuWithMocking extends GameMenu {
   private String archivesDir;
   public boolean sawFinish = false;
 
+  // for testing update and render.
   protected GameMenuWithMocking (GameEngine engine,
       BaseInput mockBaseInput, String levelsDir, String archivesDir) {
     super(engine);
@@ -22,6 +23,7 @@ public class GameMenuWithMocking extends GameMenu {
     this.archivesDir = archivesDir;
   }
   
+  // for testing initResources()
   protected GameMenuWithMocking (GameEngine engine,
       PlayField mockField, ImageBackground mockBackground, String levelsDir, String archivesDir) {
     super(engine);
