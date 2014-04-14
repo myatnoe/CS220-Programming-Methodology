@@ -1,0 +1,8 @@
+Assignment 5A Changes (Michelle Chan - 28444261)
+
+Added one more class
+- called Miniball
+- superclass : Sprite
+- implement : Cloneable
+- saved this in Block object to check for collision. changes in GameMenu, GameState, BreakOutGame
+- does not bounce like normal ball. go straight from paddle. must hit the block twice to destroy the block and score

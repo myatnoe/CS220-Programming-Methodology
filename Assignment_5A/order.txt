@@ -1,0 +1,7 @@
+Assignment 5A Changes (Michelle Chan - 28444261)
+
+- Add MiniBall class
+- Make changes in Block ( save old miniball and check collision with mini ball)
+- Make changes in BreakOutGame
+ - change Memento
+ 

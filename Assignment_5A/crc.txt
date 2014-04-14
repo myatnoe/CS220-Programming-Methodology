@@ -1,0 +1,44 @@
+Calvin Mei
+Michelle Chan
+Isabel Lee
+CS 220 HW5 CRC Cards
+
+
+Class: MiniBall
+Superclasses: Sprite
+Responsibilites:
+ -Can be fired from the paddle (by mouse, or keypress 'm')
+ -When fired, travels upward from the paddle twice as fast as normal Ball
+ -Miniballs penetrate (not bounce) up to three blocks, and destroys them after two strikes
+ -Miniballs are destroyed after penetrating three blocks or reaching the top of the screen
+ -Cannot be fired more than once every three seconds
+ -Can cause PowerUps to drop
+ -Plays a ringtone when collides with a Block 
+ -Can be saved and restored (implements corresponding interfaces
+Collaborators:
+ -GameMenu
+ -GameState
+ -BreakOutGame , Memento
+Description:
+ In BreakOutGame, 
+ -add a new SpriteGroup miniBall field and initialize in createSpriteGroups()
+ -in Memento, add a List<MiniBall>, changes to allow for miniball saving and restoring. 
+ -initResources(), set initial number of miniBalls to 5.
+ -initEventResources(), add a miniBall.newGame();
+ -createSpriteGroups(), add new SpriteGroup("miniBalls");
+ -Using Anonymous classes, add collision groups for blockMiniBallCollision and boundaryMiniBallCollision
+ -updateTextualDisplay(), add "MiniBalls remaining: " + miniBalls;
+
+
+Class: PowerUpStrategyDecoratorIncrMini
+Superclasses: PowerUpStrategyDecorator
+Responsibilities:
+ -Adds five miniballs to counter when paddle collects the powerup
+ -If paddle misses it, do nothing
+Collaborators:
+ -GameState
+ -PowerUpFactory
+Description:
+ -Only available in Level3
+ -This uses the Decorator pattern to drop a new kind of powerup that increments number of miniballs (the count in GameState)
+ -This class is intialized in PowerUpFactory.createPowerUp
