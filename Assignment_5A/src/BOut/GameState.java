@@ -77,7 +77,7 @@ public class GameState implements Cloneable, Serializable
 	/**
 	 * usual starting value for number of balls
 	 */
-	private static int baseBallsRemaining = 30; //TODO change it back to 3 
+	private static int baseBallsRemaining = 3;
 
 	/**
 	 * number of blocks remaining on the level

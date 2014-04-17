@@ -1,2 +1,10 @@
 Assignment 5A Changes (Michelle Chan - 28444261)
 
+try to shoot miniball unstop and check if it won't shoot until 3 second after. (try in all 3 levels)
+
+test whether the mini ball will only destroy 3 blocks after 2nd hit.
+
+run level 3 and test whether eating Red Power Up will increase the mini ball count by 5.
+
+try to shoot mini ball when game is paused.
+

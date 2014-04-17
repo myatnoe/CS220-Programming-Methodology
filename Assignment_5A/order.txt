@@ -1,7 +1,22 @@
 Assignment 5A Changes (Michelle Chan - 28444261)
 
 - Add MiniBall class
-- Make changes in Block ( save old miniball and check collision with mini ball)
-- Make changes in BreakOutGame
- - change Memento
+- Make changes in Block (collision with mini ball)
+
+First of all, I tried to remove the block by hitting with miniball. not with hitting twice. 
+i made changed in BreakOutGame to be able to shoot mini ball straight in Normal State.
+
+Then, I changed Block class to save the old mini ball (with ID) to make the block unactive after hitting twice.
+
+Then, I changed MiniBall class to know the maximum blocks it can destroy, (in our case is 3)
+
+Then, I add time left counter for next miniball in GameState updated by BreakOutGame.
+
+Implemented Observer pattern in GameState using anonymous classes.
+
+Modify Memento in BreakOutGame to save the miniballs.
+
+Lastly, add PowerUpStrategyDecoratorIncrMini(Decorator Pattern) for Level 3, has Red Power Up for increment mini ball count by 3, 
+and called from PowerUpFactory for creating PowerUp from BreakOutGame.
+
  

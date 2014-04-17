@@ -1,8 +1,16 @@
 Assignment 5A Changes (Michelle Chan - 28444261)
 
-Added one more class
-- called Miniball
+New Class "MiniBall"
 - superclass : Sprite
 - implement : Cloneable
-- saved this in Block object to check for collision. changes in GameMenu, GameState, BreakOutGame
+- saved ID of MiniBall in Block object to check for collision. 
+- changes in GameState(Observer Pattern, initialization for new game, check for 3 seconds, add 5 miniball on Red PowerUp, ), 
+, BreakOutGame(Memento for miniball as well,  creating collision groups for miniball and blocks, update for time left counter-3 second, Key press M and it's behaviors(shoot mini ball if the time left and ball left, display how many miniball left on the screen)
 - does not bounce like normal ball. go straight from paddle. must hit the block twice to destroy the block and score
+
+New Class "PowerUpStrategyDecoratorIncrMini"
+- superclass : PowerUpStrategyDecorator
+- related to PowerUpFactory to create PowerUp using decorator pattern.
+- to increase miniball count in GameState
+
+Make changes in Block, GameState, BreakOutGame, PowerUpFactory
