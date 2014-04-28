@@ -1,9 +1,7 @@
 package BOut;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.golden.gamedev.object.Sprite;
-import com.golden.gamedev.object.SpriteGroup;
 
 
 public class StockDisplay {
@@ -12,22 +10,28 @@ public class StockDisplay {
 	private int height;
 	private int maxColumn;
 	private int maxRow;
-	private int totalCount; // total number of sprites
-	private int screenHeight;
-	private int screenWidth;
+	private int bottomLeftX;
+	private int bottomLeftY;
 	private int gap;
 	private ArrayList<Sprite> spriteList;
 	
-	private BufferedImage image;
-	
-	public StockDisplay(int width, int height, int maxRow, int maxColumn, int totalCount, int screenWidth, int screenHeight, int gap){
+	/**
+	 * 
+	 * @param image width
+	 * @param image height
+	 * @param maximum row to display
+	 * @param maximum column to display
+	 * @param bottom left x corner of the screen
+	 * @param bottom left y corner of the screen
+	 * @param gap between the images
+	 */
+	public StockDisplay(int width, int height, int maxRow, int maxColumn, int bottomLeftX, int bottomLeftY, int gap){
 		this.width = width;
 		this.height = height;
 		this.maxColumn = maxColumn;
 		this.maxRow = maxRow;
-		this.totalCount = totalCount;
-		this.screenHeight = screenHeight;
-		this.screenWidth = screenWidth;
+		this.bottomLeftX = bottomLeftX;
+		this.bottomLeftY = bottomLeftY;
 		this.gap = gap;
 		this.spriteList = new ArrayList<Sprite>();
 		initializeSprite();
@@ -37,12 +41,12 @@ public class StockDisplay {
 	private void initializeSprite(){
 		
 		// start (x,y) for the first ball
-		int x = this.gap;
-		int y = this.screenHeight - this.gap - this.height;
+		int x = this.bottomLeftX + this.gap;
+		int y = this.bottomLeftY - this.gap - this.height;
 		for(int count = 1; count <= maxColumn*maxRow; count++){
 			Sprite s = new Sprite();
 			s.setImmutable(true);
-			//s.setActive(false);
+			s.setActive(false);
 			s.setX(x);
 			s.setY(y);
 			spriteList.add(s);
@@ -54,10 +58,10 @@ public class StockDisplay {
 	}
 	
 	private int[] getNextPosition(int x, int y, int current){
-		if(current % this.maxRow == 0){
+		if(current % this.maxRow == 0){ // next column
 			x += this.gap + this.width;
-			y = this.screenHeight - this.gap - this.height;
-		}else{
+			y = this.bottomLeftY - this.gap - this.height;
+		}else{ // same column, go up one space
 			y -= this.gap + this.height;
 		}
 		int[] newxy =  {x , y};
@@ -66,6 +70,10 @@ public class StockDisplay {
 	
 	public ArrayList<Sprite> getSprites(){
 		return spriteList;
+	}
+	
+	public int getMaxCount(){
+		return this.maxColumn*this.maxRow;
 	}
 
 }

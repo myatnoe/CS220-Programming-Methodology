@@ -68,7 +68,23 @@ public class BreakOutGame extends GameObject
 	/**
 	 * SpriteGroup for displaying balls at the bottom left corner of the screen
 	 */
-	SpriteGroup display;
+	SpriteGroup displayBalls;
+	
+	/**
+	 * SpriteGroup for displaying mini balls at the bottom left corner of the screen
+	 */
+	SpriteGroup displayMiniBalls;
+	
+	
+	/**
+	 * Maximum row and column of balls it displays on the screen
+	 */
+	int[] maxBallDisplay = {5,2};
+	
+	/**
+	 * Maximum row and column of mini balls, it displays on the screen
+	 */
+	int[] maxMiniBallDisplay = {10,5};
 
 	/**
 	 * we assume a single paddle; this is it
@@ -398,18 +414,27 @@ public class BreakOutGame extends GameObject
 	{
 		balls     = new SpriteGroup("balls");
 		miniballs = new SpriteGroup("miniballs");
-		display   = new SpriteGroup("Display");
-		// TODO
+		
+		displayBalls   = new SpriteGroup("ballDisplay");
+		int ballGap = 2; // in pixels
 		BufferedImage ballImage = getImageFromFile("Ball");
-		StockDisplay ballDisplay = new StockDisplay(ballImage.getWidth(), ballImage.getHeight(), 5, 2, GameState.getGameState().getBallsRemaining(), 800, 600, 2);
+		
+		StockDisplay ballDisplay = new StockDisplay(ballImage.getWidth(), ballImage.getHeight(), this.maxBallDisplay[0], this.maxBallDisplay[1], 0, 600, ballGap);
 		for(Sprite s : ballDisplay.getSprites()){
-			addDisplay(s, "Ball");
+			addDisplay(s, "Ball", displayBalls);
 		}
-		//StockDisplay miniballDisplay = new StockDisplay(0,0);
+		
+		displayMiniBalls = new SpriteGroup("miniballDisplay");
+		BufferedImage miniImage = getImageFromFile("MiniBall");
+		StockDisplay miniballDisplay = new StockDisplay(miniImage.getWidth(), miniImage.getHeight(), this.maxMiniBallDisplay[0], this.maxMiniBallDisplay[1], 2*(ballGap+ballImage.getWidth()), 600 , ballGap);
+		for(Sprite s : miniballDisplay.getSprites()){
+			addDisplay(s,"MiniBall", displayMiniBalls);
+		}
+		
 		paddles   = new SpriteGroup("paddles");
 		blocks    = new SpriteGroup("blocks");
 		powerUps  = new SpriteGroup("powerUps");
-		return new SpriteGroup[]{balls, miniballs, paddles, blocks, powerUps, display};
+		return new SpriteGroup[]{balls, miniballs, paddles, blocks, powerUps, displayBalls, displayMiniBalls};
 	}
 
 	/**
@@ -834,7 +859,6 @@ public class BreakOutGame extends GameObject
 	 */
 	public void render (Graphics2D g)
 	{
-		updateDisplayBall();
 		playField.render(g);
 		updateTextualDisplay(g);
 		
@@ -856,11 +880,29 @@ public class BreakOutGame extends GameObject
 		{
 			doneFont.drawString(g, message, 10, 130);
 		}
-	}    
-	
-	private void updateDisplayBall(){
-		
+		updateDisplay(theState.getBallsRemaining(), this.displayBalls);
+		updateDisplay(theState.getMiniballsRemaining(), this.displayMiniBalls);
 	}
+	
+	/**
+	 * update the ball image display on the screen depending on the GameState's ball/mini remaining 
+	 * @param total balls or mini balll remaining from GameState
+	 * @param SpriteGroup to update
+	 */
+	private void updateDisplay(int totalBalls, SpriteGroup sg){
+		int size = sg.getSize();
+		Sprite[] sprites = sg.getSprites();
+		// do not show extra balls
+		totalBalls = Math.min(totalBalls, size);
+		for(int i = 0 ; i < totalBalls; i++){
+			sprites[i].setActive(true);
+		}
+		for(int i = totalBalls; i < size; i++){
+			sprites[i].setActive(false);
+		}
+	}
+	
+	
 
 	/**
 	 * Utility routine or adding a paddle
@@ -899,12 +941,16 @@ public class BreakOutGame extends GameObject
 		balls.add(b);
 	}
 
-	//TODO
-	public void addDisplay(Sprite s, String image){
-		
+	/**
+	 * 
+	 * @param Sprite to add
+	 * @param sprite image
+	 * @param SpriteGroup to add the modified Sprite
+	 */
+	public void addDisplay(Sprite s, String image, SpriteGroup sg){
 		s.setImage(getImageFromFile(image));
 		s.setBackground(background);
-		display.add(s);
+		sg.add(s);
 	}
 
 	/**
